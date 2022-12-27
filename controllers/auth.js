@@ -1,10 +1,12 @@
 const { validationResult } = require('express-validator');
 
 const bcrypt = require('bcryptjs');
+ 
 // const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const jwt= require('jsonwebtoken');
+
 // console.log('hi1');
 
 exports.signup = async (req, res, next) => {
@@ -17,21 +19,42 @@ exports.signup = async (req, res, next) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
-
+  const role = req.body.role;
+  const number = req.body.number; 
+  const address= req.body.address; 
+  const country= req.body.country; 
+  const city= req.body.city; 
+  const lastname= req.body.lastname; 
+  
   try {
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const userDetails = {
       name: name,
       email: email,
       password: hashedPassword,
+      role: role,
+      number: number,
+      address: address, 
+      country: country, 
+      city: city,
+      lastname: lastname
+
     };
+
     console.log('hhhhh',userDetails);
-   
+
+    // console.log(token);
+
     const result = await User.save(userDetails);
+        // console.log(token);
+
+    // console.log(done2);
 
     res.status(201).json({ message: 'User registered!' });
-    
+
+    // console.log(done3);
       
   } catch (err) {
     if (!err.statusCode) {
@@ -39,13 +62,14 @@ exports.signup = async (req, res, next) => {
     }
     next(err);
   }
-  console.log(token);
+  // console.log(token);
 };
 
 exports.login = async (req, res, next) => {
   console.log('hi')
   const email = req.body.email;
   const password = req.body.password;
+  
   try {
     const user = await User.find(email);
 
@@ -69,11 +93,12 @@ exports.login = async (req, res, next) => {
       {
         email: storedUser.email,
         userId: storedUser.id,
+        role: storedUser.role,
       },
       'secretfortoken',
       { expiresIn: '1h' }
     );
-    res.status(200).json({ token: token, userId: storedUser.id });
+    res.status(200).json({ token: token, userId: storedUser.id, role: storedUser.role });
     console.log(token);
 
   } catch (err) {
@@ -85,3 +110,7 @@ exports.login = async (req, res, next) => {
   }
    console.log(token);
 };
+
+
+
+
