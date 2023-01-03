@@ -6,7 +6,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const projectRoutes = require('./routes/project');
 const taskRoutes = require('./routes/task');
-
+const topicRoutes = require('./routes/topic');
 
 const errorController = require('./controllers/error');
 
@@ -32,6 +32,7 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/project', projectRoutes);
 app.use('/task', taskRoutes);
+app.use('/topic', topicRoutes);
 
 
 // app.use('/post', postsRoutes);

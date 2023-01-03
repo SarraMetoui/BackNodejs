@@ -106,4 +106,41 @@ exports.FindById = async (req, res, next) => {
   }
 };
 
+////Total of projects
+exports.gettotalProjects = async (req, res, next) => {
+  try {
+    const nb = await Project.gettotalProjects();
+    res.status(200).json(nb);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
 
+////Total of completed projects
+exports.getCompleted = async (req, res, next) => {
+  try {
+    const nb = await Project.getCompleted();
+    res.status(200).json(nb);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+////Total of completed projects
+exports.getActive = async (req, res, next) => {
+  try {
+    const nb = await Project.getActive();
+    res.status(200).json(nb);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};

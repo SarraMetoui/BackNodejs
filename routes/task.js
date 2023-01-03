@@ -29,5 +29,9 @@ router.put('/update/:id', taskController.updateTask);
 
 router.get('/find/:id', taskController.FindById);
 
+router.get('/project/:id', taskController.getProjectTasks);
+
+router.get('/task/:id', taskController.getTaskProject);
+
 
 module.exports = router;

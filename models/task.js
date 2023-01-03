@@ -1,13 +1,16 @@
 const db = require('../util/database');
 
 module.exports = class Task {
-  constructor(name, description, status, date, progress, priority) {
+  constructor(name, description, status, date, progress, priority, time, duration) {
     this.name= name	;
     this.description = description;
     this.status = status;
     this.date = date;  
     this.progress=progress;
     this.priority=priority; 
+    this.time=time;
+    this.duration=duration; 
+    
 
   }
   static find(email) {
@@ -18,10 +21,10 @@ module.exports = class Task {
     return db.execute('SELECT * FROM task');
   }
   
-  static save(project) {
+  static save(task) {
     return db.execute(
-      'INSERT INTO task (name, description, status, date, progress, priority) VALUES (?, ?, ?, ?, ?, ?)',
-      [project.name, project.description, project.status, project.date, project.progress, project.priority]
+      'INSERT INTO task (name, description, status, date, progress, priority, time, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [task.name, task.description, task.status, task.date, task.progress, task.priority, task.time, task.duration]
     );
   }
 
@@ -34,14 +37,24 @@ module.exports = class Task {
   //   return db.execute('UPDATE test WHERE id = ?', [id]);
   // }
 
-  static update(id,project) {
+  static update(id,task) {
     return db.execute(
-      'UPDATE task SET name=?, description=?, status=?, date=?, progress=?, priority=? WHERE id=? ',
-      [project.name, project.description, project.status, project.date, project.progress, project.priority, id]
+      'UPDATE task SET name=?, description=?, status=?, date=?, progress=?, priority=?, time=?, duration=? WHERE id=? ',
+      [task.name, task.description, task.status, task.date, task.progress, task.priority, task.time, task.duration, id]
     );
   }
 
   static getById(id) {
     return db.execute('SELECT * FROM task WHERE id = ?', [id]);
+  }
+
+  // selects a project including all tasks for this project
+  static getProjectTasks(id) {
+    return db.execute('SELECT * FROM task WHERE projectid = ?', [id]);
+  }
+
+   // selects a tasks's project name 
+   static getTaskProject(id) {
+    return db.execute('SELECT project.name FROM task, project WHERE task.id=? and project.id = task.projectid', [id]);
   }
 };

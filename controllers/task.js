@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
  
 // const jwt = require('jsonwebtoken');
 
-const Project = require('../models/task');
+const Task = require('../models/task');
 
 // console.log('hi1');
 
@@ -20,17 +20,21 @@ exports.postTask = async (req, res, next) => {
     const date = req.body.date;
     const progress = req.body.progress;
     const priority = req.body.priority;
+    const time = req.body.time;
+    const duration = req.body.duration;
     try {
-      const project = {
+      const task = {
         name: name,
         description: description,
         status: status,
         date: date,
         progress: progress,
         priority: priority,
+        time: time,
+        duration: duration,
     
       };
-      const result = await Project.save(project);
+      const result = await Task.save(task);
       res.status(201).json({ message: 'Posted!' });
     } catch (err) {
       if (!err.statusCode) {
@@ -43,7 +47,7 @@ exports.postTask = async (req, res, next) => {
 ////Fetching a project
 exports.fetchAll = async (req, res, next) => {
   try {
-    const [allProjects] = await Project.fetchAll();
+    const [allProjects] = await Task.fetchAll();
     res.status(200).json(allProjects);
   } catch (err) {
     if (!err.statusCode) {
@@ -56,7 +60,7 @@ exports.fetchAll = async (req, res, next) => {
 ////Deleting a project
 exports.deleteTask = async (req, res, next) => {
   try {
-    const deleteResponse = await Project.delete(req.params.id);
+    const deleteResponse = await Task.delete(req.params.id);
     res.status(200).json(deleteResponse);
   } catch (err) {
     if (!err.statusCode) {
@@ -71,7 +75,7 @@ exports.deleteTask = async (req, res, next) => {
 ////Update a project
 exports.updateTask = async (req, res, next) => {
   try {
-    const updateResponse = await Project.update(req.params.id, req.body);
+    const updateResponse = await Task.update(req.params.id, req.body);
     res.status(200).json(updateResponse);
   } catch (err) {
     if (!err.statusCode) {
@@ -85,7 +89,7 @@ exports.updateTask = async (req, res, next) => {
 
 exports.FindById = async (req, res, next) => {
   try {
-    const project = await Project.getById(req.params.id);
+    const project = await Task.getById(req.params.id);
     res.status(200).json(project);
   } catch (err) {
     if (!err.statusCode) {
@@ -95,4 +99,30 @@ exports.FindById = async (req, res, next) => {
   }
 };
 
+//// Get project's tasks
 
+exports.getProjectTasks = async (req, res, next) => {
+  try {
+    const project = await Task.getProjectTasks(req.params.id);
+    res.status(200).json(project);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+//// Get task's project name
+
+exports.getTaskProject = async (req, res, next) => {
+  try {
+    const project = await Task.getTaskProject(req.params.id);
+    res.status(200).json(project);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};

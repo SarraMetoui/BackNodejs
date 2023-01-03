@@ -50,4 +50,16 @@ module.exports = class Project {
   static getById(id) {
     return db.execute('SELECT * FROM project WHERE id = ?', [id]);
   }
+
+  static gettotalProjects() {
+    return db.execute('SELECT COUNT(id) AS id_count FROM project');
+  }
+
+  static getCompleted() {
+    return db.execute('SELECT COUNT(id) AS completed FROM project WHERE status="completed" ');
+  }
+
+  static getActive() {
+    return db.execute('SELECT COUNT(id) AS active FROM project WHERE status="active" ');
+  }
 };
