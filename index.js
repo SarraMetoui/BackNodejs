@@ -7,7 +7,7 @@ const userRoutes = require('./routes/user');
 const projectRoutes = require('./routes/project');
 const taskRoutes = require('./routes/task');
 const topicRoutes = require('./routes/topic');
-
+const clientRoutes = require('./routes/client');
 const errorController = require('./controllers/error');
 
 const app = express();
@@ -33,6 +33,7 @@ app.use('/user', userRoutes);
 app.use('/project', projectRoutes);
 app.use('/task', taskRoutes);
 app.use('/topic', topicRoutes);
+app.use('/client', clientRoutes);
 
 
 // app.use('/post', postsRoutes);
