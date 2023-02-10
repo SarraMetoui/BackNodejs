@@ -1,16 +1,20 @@
 const express = require('express');
-
+ 
 const bodyParser = require('body-parser');
-
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const projectRoutes = require('./routes/project');
 const taskRoutes = require('./routes/task');
 const topicRoutes = require('./routes/topic');
 const clientRoutes = require('./routes/client');
+const documentRoutes = require('./routes/document');
+
 const errorController = require('./controllers/error');
 
+const uploadRoutes = require('./routes/upload');
 const app = express();
+
+// global.__basedir = __dirname;
 
 
 const ports = process.env.PORT || 3000;
@@ -34,6 +38,8 @@ app.use('/project', projectRoutes);
 app.use('/task', taskRoutes);
 app.use('/topic', topicRoutes);
 app.use('/client', clientRoutes);
+app.use('/document', documentRoutes);
+app.use('/files', uploadRoutes);
 
 
 // app.use('/post', postsRoutes);
