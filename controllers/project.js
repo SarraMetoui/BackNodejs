@@ -10,6 +10,7 @@ const Project = require('../models/project');
 
 //// add a project
 exports.postProject = async (req, res, next) => {
+  console.log('hi2');
     const errors = validationResult(req);
   
     if (!errors.isEmpty()) return;
@@ -41,7 +42,9 @@ exports.postProject = async (req, res, next) => {
         priority: priority,
         version: version,
       };
+      console.log('hi2');
       const result = await Project.save(project);
+      console.log('hi1');
       res.status(201).json({ message: 'Posted!' });
     } catch (err) {
       if (!err.statusCode) {
@@ -49,7 +52,8 @@ exports.postProject = async (req, res, next) => {
       }
       next(err);
     }
-  };
+    console.log('hi1');
+    };
 
 ////Fetching a project
 exports.fetchAll = async (req, res, next) => {
