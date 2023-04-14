@@ -1,7 +1,7 @@
 const db = require('../util/database');
 
 module.exports = class Task {
-  constructor(name, description, status, date, progress, priority, time, duration) {
+  constructor(name, description, status, date, progress, priority, time, duration, projectid) {
     this.name= name	;
     this.description = description;
     this.status = status;
@@ -10,6 +10,7 @@ module.exports = class Task {
     this.priority=priority; 
     this.time=time;
     this.duration=duration; 
+    this.projectid=projectid;
     
 
   }
@@ -21,10 +22,10 @@ module.exports = class Task {
     return db.execute('SELECT * FROM task');
   }
   
-  static save(task) {
+  static save(task, projectid) {
     return db.execute(
-      'INSERT INTO task (name, description, status, date, progress, priority, time, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [task.name, task.description, task.status, task.date, task.progress, task.priority, task.time, task.duration]
+      'INSERT INTO task (name, description, status, date, progress, priority, time, duration, projectid) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)',
+      [task.name, task.description, task.status, task.date, task.progress, task.priority, task.time, task.duration, projectid]
     );
   }
 
@@ -51,7 +52,7 @@ module.exports = class Task {
   // selects a project including all tasks for this project
   static getProjectTasks(id) {
     return db.execute('SELECT * FROM task WHERE projectid = ?', [id]);
-  }
+  } 
 
    // selects a tasks's project name 
    static getTaskProject(id) {
