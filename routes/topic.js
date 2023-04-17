@@ -9,7 +9,7 @@ const Topic = require('../models/topic');
 const topicController = require('../controllers/topic');
 
 router.post(
-    '/post',
+    '/post/:id',
     [
       body('name').trim().not().isEmpty(),
       body('description').trim().not().isEmpty(),
@@ -26,7 +26,7 @@ router.put('/update/:id', topicController.updateTopic);
 
 router.get('/find/:id', topicController.FindById);
 
-// router.get('/project/:id', topicController.getProjectTasks);
+router.get('/project/:id', topicController.getProjectTopics);
 
 // router.get('/task/:id', taskController.getTaskProject);
 

@@ -10,6 +10,7 @@ const documentRoutes = require('./routes/document');
 const errorController = require('./controllers/error');
 const uploadRoutes = require('./routes/upload');
 const riskRoutes = require('./routes/risk');
+const issueRoutes = require('./routes/issue');
 
 const app = express();
 
@@ -43,6 +44,8 @@ app.use('/client', clientRoutes);
 app.use('/document', documentRoutes);
 app.use('/files', uploadRoutes);
 app.use('/risk', riskRoutes);
+app.use('/issue', issueRoutes);
+
 
 
 

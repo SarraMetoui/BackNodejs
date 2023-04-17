@@ -1,7 +1,7 @@
 const db = require('../util/database');
 
 module.exports = class Task {
-  constructor(name, description, status, date, progress, priority, time, duration, projectid) {
+  constructor(name, description, status, date, progress, priority, time, duration, topicid) {
     this.name= name	;
     this.description = description;
     this.status = status;
@@ -10,7 +10,7 @@ module.exports = class Task {
     this.priority=priority; 
     this.time=time;
     this.duration=duration; 
-    this.projectid=projectid;
+    this.topicid=topicid;
     
 
   }
@@ -22,13 +22,13 @@ module.exports = class Task {
     return db.execute('SELECT * FROM task');
   }
   
-  static save(task, projectid) {
+  static save(task, topicid) {
     return db.execute(
-      'INSERT INTO task (name, description, status, date, progress, priority, time, duration, projectid) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)',
-      [task.name, task.description, task.status, task.date, task.progress, task.priority, task.time, task.duration, projectid]
+      'INSERT INTO task (name, description, status, date, progress, priority, time, duration, topicid) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)',
+      [task.name, task.description, task.status, task.date, task.progress, task.priority, task.time, task.duration, topicid]
     );
   }
-
+ 
   static delete(id) {
     return db.execute('DELETE FROM task WHERE id = ?', [id]);
   }
@@ -51,11 +51,11 @@ module.exports = class Task {
 
   // selects a project including all tasks for this project
   static getProjectTasks(id) {
-    return db.execute('SELECT * FROM task WHERE projectid = ?', [id]);
+    return db.execute('SELECT * FROM task WHERE topicid = ?', [id]);
   } 
 
    // selects a tasks's project name 
    static getTaskProject(id) {
-    return db.execute('SELECT project.name FROM task, project WHERE task.id=? and project.id = task.projectid', [id]);
+    return db.execute('SELECT project.name FROM task, project WHERE task.id=? and project.id = task.topicid', [id]);
   }
 };

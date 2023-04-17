@@ -4,12 +4,12 @@ const bcrypt = require('bcryptjs');
  
 // const jwt = require('jsonwebtoken');
 
-const Topic = require('../models/topic');
+const Issue = require('../models/issue');
 
 // console.log('hi1');
 
 //// add a project
-exports.postTopic = async (req, res, next) => {
+exports.postIssue= async (req, res, next) => {
     const errors = validationResult(req);
   
     if (!errors.isEmpty()) return;
@@ -17,22 +17,17 @@ exports.postTopic = async (req, res, next) => {
     const name = req.body.name;
     const description = req.body.description;
     const status = req.body.status;
-    const date= req.body.date;
-    const privacy = req.body.privacy;
-  
-    const projectid = req.body.projectid;
-    
+    const date= req.body.date;   
+    const projectid = req.body.projectid; 
     try {
-      const topic = {
+      const issue = {
         name: name,
         description: description,
         status:status,
         date:date,
-        privacy: privacy,
-        projectid:projectid,
-    
+        projectid: projectid,
       };
-      const result = await Topic.save(topic, projectid);
+      const result = await Issue.save(issue, projectid);
       res.status(201).json({ message: 'Posted!' });
     } catch (err) {
       if (!err.statusCode) {
@@ -45,7 +40,7 @@ exports.postTopic = async (req, res, next) => {
 ////Fetching a project
 exports.fetchAll = async (req, res, next) => {
   try {
-    const [allProjects] = await Topic.fetchAll();
+    const [allProjects] = await Issue.fetchAll();
     res.status(200).json(allProjects);
   } catch (err) {
     if (!err.statusCode) {
@@ -56,9 +51,9 @@ exports.fetchAll = async (req, res, next) => {
 };
 
 ////Deleting a project
-exports.deleteTopic = async (req, res, next) => {
+exports.deleteIssue = async (req, res, next) => {
   try {
-    const deleteResponse = await Topic.delete(req.params.id);
+    const deleteResponse = await Issue.delete(req.params.id);
     res.status(200).json(deleteResponse);
   } catch (err) {
     if (!err.statusCode) {
@@ -71,9 +66,9 @@ exports.deleteTopic = async (req, res, next) => {
 
 
 ////Update a project
-exports.updateTopic = async (req, res, next) => {
+exports.updateIssue = async (req, res, next) => {
   try {
-    const updateResponse = await Topic.update(req.params.id, req.body);
+    const updateResponse = await Issue.update(req.params.id, req.body);
     res.status(200).json(updateResponse);
   } catch (err) {
     if (!err.statusCode) {
@@ -87,8 +82,8 @@ exports.updateTopic = async (req, res, next) => {
 
 exports.FindById = async (req, res, next) => {
   try {
-    const project = await Topic.getById(req.params.id);
-    res.status(200).json(project);
+    const issue = await Issue.getById(req.params.id);
+    res.status(200).json(issue);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -99,10 +94,10 @@ exports.FindById = async (req, res, next) => {
 
 // Get project's tasks
 
-exports.getProjectTopics = async (req, res, next) => {
+exports.getProjectIssues = async (req, res, next) => {
   try {
-    const topic = await Topic.getProjectTopics(req.params.id);
-    res.status(200).json(topic);
+    const issue = await Issue.getProjectIssuess(req.params.id);
+    res.status(200).json(issue);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -111,16 +106,17 @@ exports.getProjectTopics = async (req, res, next) => {
   }
 };
 
-// //// Get task's project name
-
-// exports.getTaskProject = async (req, res, next) => {
-//   try {
-//     const project = await Task.getTaskProject(req.params.id);
-//     res.status(200).json(project);
-//   } catch (err) {
-//     if (!err.statusCode) {
-//       err.statusCode = 500;
-//     }
-//     next(err);
-//   }
-// };
+////Update a status
+exports.updateStatus = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const status = req.body.status;
+      const updateResponse = await Issue.getStatus(id, status);
+      res.status(200).json(updateResponse);
+    } catch (err) {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    }
+  };

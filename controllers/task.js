@@ -26,7 +26,7 @@ exports.postTask = async (req, res, next) => {
   const priority = req.body.priority;
   const time = req.body.time;
   const duration = req.body.duration;
-  const projectid = req.body.projectid;
+  const topicid = req.body.topicid;
   try {
     
     const task = {
@@ -38,10 +38,10 @@ exports.postTask = async (req, res, next) => {
       priority: priority,
       time: time,
       duration: duration,
-      projectid:projectid
+      topicid:topicid
   
     };
-    const result = await Task.save(task,projectid);
+    const result = await Task.save(task,topicid);
     res.status(201).json({ message: 'Posted!' });
   } catch (err) {
     if (!err.statusCode) {
