@@ -11,12 +11,14 @@ const errorController = require('./controllers/error');
 const uploadRoutes = require('./routes/upload');
 const riskRoutes = require('./routes/risk');
 const issueRoutes = require('./routes/issue');
+const meetingsRoutes = require('./routes/meetings');
 
 const app = express();
 
 // global.__basedir = __dirname;
 
 const cors = require('cors');
+const socketIO = require('socket.io');
 
 
 const ports = process.env.PORT || 3000;
@@ -45,48 +47,84 @@ app.use('/document', documentRoutes);
 app.use('/files', uploadRoutes);
 app.use('/risk', riskRoutes);
 app.use('/issue', issueRoutes);
+app.use('/meetings', meetingsRoutes);
 
 
+// const WebSocket = require('ws');
+// const server = new WebSocket.Server({ port: 8080 });
 
+// server.on('connection', function connection(ws) {
+//   console.log('Client connected');
 
-// app.use('/post', postsRoutes);
+//   ws.on('message', function incoming(message) {
+//     console.log('received: %s', message);
+
+//     // Broadcast message to all connected clients
+//     server.clients.forEach(function each(client) {
+//       if (client !== ws && client.readyState === WebSocket.OPEN) {
+//         client.send(message);
+//       }
+//     });
+//   });
+
+//   ws.on('close', function close() {
+//     console.log('Client disconnected');
+//   });
+// });
+
+const WebSocket = require('websocket').server;
+const http = require('http');
+const fs = require('fs');
+
+const server = http.createServer();
+server.listen(8080, () => {
+  console.log('Server is listening on port 8080');
+});
+
+const wsServer = new WebSocket({
+  httpServer: server,
+});
+
+const connections = [];
+
+wsServer.on('request', (request) => {
+  const connection = request.accept(null, request.origin);
+  connections.push(connection);
+
+  connection.on('message', (message) => {
+    const msg = message.utf8Data;
+    console.log(`Received message: ${msg}`);
+    const timestamp = new Date().toISOString();
+    const data = `${timestamp} - ${msg}\n`;
+    fs.appendFile('chat-history.txt', data, (err) => {
+      if (err) throw err;
+      console.log('Message saved to file');
+    });
+    connections.forEach((conn) => conn.sendUTF(msg));
+  });
+
+  connection.on('close', () => {
+    console.log('Connection closed');
+  });
+
+  fs.readFile('chat-history.txt', 'utf8', (err, data) => {
+    if (err) {
+      console.log('Error reading chat history file:', err);
+      return;
+    }
+    const messages = data.split('\n');
+    messages.forEach((msg) => {
+      if (msg) {
+        connection.sendUTF(msg);
+      }
+    });
+  });
+});
+
 
 app.use(errorController.get404);
 
 app.use(errorController.get500);
 
-// app.use(cors({
-//   origin: '*'
-// }));
-// app.use(cors(
-//   {
-//     origin: true,
-//     credentials: true,
-//     methods:'POST,GET,PUT,OPTIONS,DELETE'
-//   }
-// ));
-// const corsOptions = {
-//   origin: "http://127.0.0.0",
-// };
-// app.use(cors(corsOptions));
 
-
-// app.use(function (req, res, next) {
-
-//   // Website you wish to allow to connect
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-
-//   // Request methods you wish to allow
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-//   // Request headers you wish to allow
-//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-//   // Set to true if you need the website to include cookies in the requests sent
-//   // to the API (e.g. in case you use sessions)
-//   res.setHeader('Access-Control-Allow-Credentials', true);
-// console.log('reeess', res);
-//   // Pass to next layer of middleware
-//   next();
-// });
 app.listen(ports, () => console.log(`Listening on port ${ports}`));

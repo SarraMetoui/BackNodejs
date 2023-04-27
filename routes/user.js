@@ -16,6 +16,7 @@ router.delete('/delete/:id', userController.deleteUser);
 
 router.put('/update/:id', userController.updateUser);
 router.get('/find/:id', userController.FindById);
+router.get('/topic/:id', userController.getProjectTopics);
 
 
 module.exports = router;

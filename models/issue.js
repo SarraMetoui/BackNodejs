@@ -50,5 +50,9 @@ module.exports = class Issue{
 //    static getTaskProject(id) {
 //     return db.execute('SELECT project.name FROM task, project WHERE task.id=? and project.id = task.projectid', [id]);
 //   }
+
+static getProjectIssues(id) {
+  return db.execute('SELECT * FROM issue WHERE projectid = ?', [id]);
+}
 };
 

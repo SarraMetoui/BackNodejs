@@ -96,7 +96,7 @@ exports.FindById = async (req, res, next) => {
 
 exports.getProjectIssues = async (req, res, next) => {
   try {
-    const issue = await Issue.getProjectIssuess(req.params.id);
+    const issue = await Issue.getProjectIssues(req.params.id);
     res.status(200).json(issue);
   } catch (err) {
     if (!err.statusCode) {

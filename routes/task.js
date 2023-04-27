@@ -13,6 +13,12 @@ router.post(
     
     taskController.postTask
   );
+
+  router.post(
+    '/user/:id',
+    
+    taskController.postUser
+  );
 router.get('/get', taskController.fetchAll);
 
 

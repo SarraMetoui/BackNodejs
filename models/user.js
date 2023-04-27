@@ -11,6 +11,7 @@ module.exports = class User {
     this.country= country;
     this.city= city;
     this.lastname= lastname;
+    this.topicid=topicid;
 
   }
 
@@ -54,5 +55,9 @@ module.exports = class User {
 
   static getById(id) {
     return db.execute('SELECT * FROM test WHERE id = ?', [id]);
+  }
+
+  static getTopicUsers(id) {
+    return db.execute('SELECT * FROM test WHERE topicid = ?', [id]);
   }
 };

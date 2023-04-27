@@ -23,7 +23,8 @@ router.put('/update/:id', issueController.updateIssue);
 router.get('/find/:id', issueController.FindById);
 
 router.get('/project/:id', issueController.getProjectIssues);
-router.get('/status/:id', issueController.updateStatus);
+
+router.put('/change/:id/status', issueController.updateStatus);
 
 
 

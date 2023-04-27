@@ -27,6 +27,9 @@ exports.postTask = async (req, res, next) => {
   const time = req.body.time;
   const duration = req.body.duration;
   const topicid = req.body.topicid;
+  const uid = req.body.uid;
+
+
   try {
     
     const task = {
@@ -38,10 +41,49 @@ exports.postTask = async (req, res, next) => {
       priority: priority,
       time: time,
       duration: duration,
-      topicid:topicid
-  
+      topicid:topicid,
+      uid:uid,
     };
-    const result = await Task.save(task,topicid);
+    const result = await Task.save(task,topicid,uid);
+    res.status(201).json({ message: 'Posted!' });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+exports.postUser = async (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) return;
+
+  const name = req.body.name;
+  const description = req.body.description;
+  const status = req.body.status;
+  const date = req.body.date;
+  const progress = req.body.progress;
+  const priority = req.body.priority;
+  const time = req.body.time;
+  const duration = req.body.duration;
+ 
+  const uid = req.body.uid;
+
+
+  try {
+    
+    const task = {
+      name: name,
+      description: description,
+      status: status,
+      date: date,
+      progress: progress,
+      priority: priority,
+      time: time,
+      duration: duration,
+      uid:uid,
+    };
+    const result = await Task.saveuser(task,uid);
     res.status(201).json({ message: 'Posted!' });
   } catch (err) {
     if (!err.statusCode) {
